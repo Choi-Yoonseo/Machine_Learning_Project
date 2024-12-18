@@ -21,17 +21,66 @@
 
 ## 코드 설명  
 
+### **0. 필요한 라이브러리 import and install
+
+<img width="711" alt="library" src="https://github.com/user-attachments/assets/baeda773-17ed-48d1-bed1-12916a086177" />
+
+프로젝트에서 사용할 라이브러리의 기능과 역할을 설정 및 이후 모든 기반을 제공하는 부분.
+pandas : CSV파일 로드 및 데이터프레임 처리를 위한 라이브러리
+matplotlib : 그래프를 그리기 위한 라이브러리
+re : 특수문자 제거를 위한 라이브러리 (전처리이용)
+numpy : 수치 연산 및 배열을 위한 라이브러리
+scikit : 머신러닝 알고리즘과 데이터 처리 도구 제공
+tensorflow : 딥러닝을 위한 라이브러리
+
 ### **1. 데이터 로드 및 전처리**  
+<img width="496" alt="text_preprocess" src="https://github.com/user-attachments/assets/eb30202a-dee6-4fd9-8e04-9f99eda6b252" />
+
 - **데이터셋**: Sentiment140 (`training.1600000.processed.noemoticon.csv`)  
 - **전처리 과정**:
    - 텍스트를 **소문자화**.
    - 특수 문자 및 불필요한 공백 제거.
    - 감성 레이블을 **긍정(4)** → `POSITIVE`, **부정(0)** → `NEGATIVE`로 변환.
-   - 날짜 데이터를 파싱하여 시간 순서대로 정리.  
+   - 날짜 데이터를 파싱하여 시간 순서대로 정리.
+     
+<img width="842" alt="load_preprocess" src="https://github.com/user-attachments/assets/baa1286a-d553-4574-a22e-94d3387c96fc" />
+   - 데이터 로드
+    CSV 파일에서 데이터를 읽음.
+    date, text, target 열만 선택하여 불필요한 데이터를 제거.
 
+   - 텍스트 데이터 전처리
+    text_preprocessing 함수로 텍스트를 소문자로 변환, 특수문자 제거, 공백 정리.
+
+   - 감성 레이블 변환
+    target 열의 레이블을 0 → NEGATIVE, 4 → POSITIVE로 변환하여 가독성 향상.
+
+   - 결측값 및 날짜 처리
+    결측값을 제거하고, date 열을 날짜 형식으로 변환.
+    날짜 변환 실패 행을 삭제하여 데이터 품질을 유지.
+
+   - 전처리된 데이터 반환
+    최종적으로 정리된 데이터를 반환하며, 이후 분석과 모델 학습에 사용.
+     
 ### **2. 감성 변화 시각화**  
-- 날짜별 **긍정**과 **부정** 트윗의 수를 **꺾은선 그래프**로 시각화합니다.  
-- **트렌드 피크 탐지**: 감성 변화가 급격히 일어나는 날짜를 탐지하고 강조합니다.  
+<img width="764" alt="sentiment trends" src="https://github.com/user-attachments/assets/bae8f965-b22a-4d27-8db5-ad2c9747b019" />
+
+- 감성 변화 시각화 및 저장 함수
+  기능 : 날짜별 긍정(POSITIVE)과 부정(NEGATIVE) 트윗 수를 집계하여 꺾은선 그래프로 시각화.
+  
+  출력 : 그래프를 화면에 표시하거나, 지정된 경로(save_path)에 이미지 파일로 저장.
+  
+  활용 : 시간에 따른 감성 변화를 직관적 분석 가능, 중요한 트렌드를 파악 가능.
+
+### **3. peak_detection
+<img width="766" alt="peak detection" src="https://github.com/user-attachments/assets/cef70f71-ebd5-40da-a54f-f6f8a8e5f7fb" />
+
+- 날짜를 표준 형식으로 변환하고 target별 트윗 수를 날짜별로 집계.
+- 날짜별 변화량의 차이를 계산하여 변화량이 가장 큰 날짜(peak)를 탐지.
+- 출력:
+   피크 날짜 정보 : 감성 변화가 최대인 날짜 출력.
+   강조 그래프 : 꺾은선 그래프에 피크 날짜를 빨간선과 텍스트로 표시.
+
+
 
 ### **3. 모델 학습 및 평가**  
 - **TF-IDF 벡터화**: 텍스트 데이터를 벡터화하여 모델에 입력합니다.  
