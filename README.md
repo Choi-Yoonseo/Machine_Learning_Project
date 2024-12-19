@@ -196,7 +196,7 @@ accuracy_evaluation 함수는 로지스틱 회귀(logistic regression)을 사용
 
 ## 모델 성능 평가
 
-Logistic Regression을 사용하여 모델 성능을 평가하였습니다. 평가 지표와 결과는 아래와 같습니다.
+Logistic Regression을 사용하여 모델 성능을 평가
 
 ---
 
